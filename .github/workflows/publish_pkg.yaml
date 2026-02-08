@@ -1,35 +1,21 @@
 name: Publish Python Package
-
 on:
-  release:
-    types: [created]
-
+    release:
+        types: [created]
 jobs:
-  deploy:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.11"
-
-      - name: Install build tools
-        run: |
-          python -m pip install --upgrade pip
-          pip install build twine
-
-      - name: Build package
-        run: |
-          python -m build
-     
-      - name: Publish to TestPyPI
-        env:
-          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: |
-          twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-       
+    deploy:
+        runs-on: ubuntu-22.04
+        steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v3
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install setuptools wheel twine
+        - name: Build and publish
+          env:
+            TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+            TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+          run: |
+            python setup.py sdist bdist_wheel
+            twine upload --verbose --repository-url https://test.pypi.org/legacy/ -u ${{ secrets.TWINE_USERNAME }} -p ${{ secrets.TWINE_PASSWORD }} dist/*
