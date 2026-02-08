@@ -23,6 +23,7 @@ jobs:
 
       - name: Build package
         run: |
+          cd django_cityloc_pkg_Victor
           python -m build
 
       - name: Publish to TestPyPI
@@ -30,4 +31,5 @@ jobs:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: |
-          twine upload --repository-url https://test.pypi
+          cd django_cityloc_pkg_Victor
+          twine upload --repository-url https://test.pypi.org/legacy/ dist/*
