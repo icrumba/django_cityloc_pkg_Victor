@@ -25,12 +25,11 @@ jobs:
       - name: Build package
         run: |
           python -m build
-        working-directory: django_cityloc_pkg_Victor
-
+     
       - name: Publish to TestPyPI
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: |
           twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-        working-directory: django_cityloc_pkg_Victor
+       
